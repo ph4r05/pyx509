@@ -167,6 +167,11 @@ def print_certificate_details(x509cert):
         if nce.excludedSubtrees:
             print "\t\tExcluded:", subtreeFmt(nce.excludedSubtrees)
 
+    if tbs.appleSubmissionCertificateExt:
+        print "\tApple Submission Certificate"
+    if tbs.appleDevelopmentCertificateExt:
+        print "\tApple Development Certificate"
+
     print "Signature:", hexlify(x509cert.signature)
     print "=== EOF X509 Certificate ==="
 

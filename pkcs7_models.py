@@ -74,6 +74,8 @@ class Name(object):
         "1.3.6.1.4.1.5734.1.3": "Apellido2",
         "1.3.6.1.4.1.5734.1.1": "Nombre",
         "1.3.6.1.4.1.5734.1.4": "DNI",
+        # http://tools.ietf.org/html/rfc1274.html
+        "0.9.2342.19200300.100.1.1": "Userid",
     }
 
     def __init__(self, name):
@@ -533,6 +535,17 @@ class NetscapeCertTypeExt(object):
         self.caCert = len(bits) > 5 and bool(bits[5])
 
 
+
+class AppleSubmissionCertificateExt(object):
+    def __init__(self, asn1_netscapeCertType):
+        pass
+
+
+class AppleDevelopmentCertificateExt(object):
+    def __init__(self, asn1_netscapeCertType):
+        pass
+
+
 class ExtensionType(object):
     '''"Enum" of extensions we know how to parse.'''
     SUBJ_ALT_NAME = "subjAltNameExt"
@@ -548,6 +561,8 @@ class ExtensionType(object):
     POLICY_CONSTRAINTS = "policyConstraintsExt"
     NAME_CONSTRAINTS = "nameConstraintsExt"
     NETSCAPE_CERT_TYPE = "netscapeCertTypeExt"
+    APPLE_SUBMISSION_CERTIFICATE = "appleSubmissionCertificateExt"
+    APPLE_DEVELOPMENT_CERTIFICATE = "appleDevelopmentCertificateExt"
 
 
 class ExtensionTypes(object):
@@ -578,6 +593,8 @@ class Extension(object):
         "2.5.29.36": (PolicyConstraints(),            lambda v: PolicyConstraintsExt(v),              ExtensionType.POLICY_CONSTRAINTS),
         "2.5.29.30": (NameConstraints(),              lambda v: NameConstraintsExt(v),                ExtensionType.NAME_CONSTRAINTS),
         "2.16.840.1.113730.1.1": (NetscapeCertType(), lambda v: NetscapeCertTypeExt(v),               ExtensionType.NETSCAPE_CERT_TYPE),
+        "1.2.840.113635.100.6.1.4": (None,            lambda v: AppleSubmissionCertificateExt(v),     ExtensionType.APPLE_SUBMISSION_CERTIFICATE),
+        "1.2.840.113635.100.6.1.2": (None,            lambda v: AppleDevelopmentCertificateExt(v),     ExtensionType.APPLE_DEVELOPMENT_CERTIFICATE),
     }
 
     def __init__(self, extension):
