@@ -23,7 +23,7 @@ Decoding of PKCS7 messages
 from cStringIO import StringIO
 
 # dslib imports
-from pkcs7.asn1_models.decoder_workarounds import decode
+from asn1_models.decoder_workarounds import decode
 from pyasn1 import error
 
 # local imports
