@@ -171,6 +171,8 @@ class ValidityInterval(object):
             second = int(date[12:14])
         except (ValueError, IndexError):
             second = 0
+        if second>59:
+            second = 59
         return datetime.datetime(year, month, day, hour, minute, second)
 
 
