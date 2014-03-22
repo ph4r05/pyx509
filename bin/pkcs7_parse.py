@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-from x509.pkcs7_models import PKCS7
+from pyx509.pkcs7_models import PKCS7
 
 
 def print_signature_info(derData):
