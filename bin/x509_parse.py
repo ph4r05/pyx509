@@ -19,7 +19,7 @@
 #*
 
 import sys
-from pyx509.pkcs7_models import X509Certificate
+from pyx509.models import X509Certificate
 
 
 def print_certificate_info(derData):
