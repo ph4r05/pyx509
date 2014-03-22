@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #*    pyx509 - Python library for parsing X.509
 #*    Copyright (C) 2009-2012  CZ.NIC, z.s.p.o. (http://www.nic.cz)
 #*
@@ -19,7 +18,8 @@
 #*
 
 import sys
-from pyx509.models import X509Certificate
+from models import PKCS7
+from models import X509Certificate
 
 
 def print_certificate_info(derData):
@@ -29,10 +29,22 @@ def print_certificate_info(derData):
     X509Certificate.from_der(derData).display()
 
 
-if __name__ == "__main__":
+def print_certificate_info_cmd():
     if len(sys.argv) < 2:
-        print >> sys.stderr, "Usage: x509_parse.py certificate.der"
+        print >> sys.stderr, "Usage: %s <certicate file>" % sys.argv[0]
         sys.exit(1)
+    print_certificate_info(file(sys.argv[1]).read())
 
-    der_file = sys.argv[1]
-    print_certificate_info(file(der_file).read())
+
+def print_signature_info(derData):
+    """
+    Print certificates of signature
+    """
+    PKCS7.from_der(derData).display()
+
+
+def print_signature_info_cmd():
+    if len(sys.argv) < 2:
+        print >> sys.stderr, "Usage: %s <pkcs 7 signature file>" % sys.argv[0]
+        sys.exit(1)
+    print_signature_info(file(sys.argv[1]).read())
