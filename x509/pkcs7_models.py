@@ -119,6 +119,8 @@ class Name(BaseModel):
         "2.16.724.1.3.5.2.2.7": "Apellido1",
         "2.16.724.1.3.5.2.2.8": "Apellido2",
         "2.16.724.1.3.5.2.2.9": "email",
+        # http://tools.ietf.org/html/rfc1274.html
+        "0.9.2342.19200300.100.1.1": "Userid",
     }
 
     def __init__(self, name):
@@ -214,6 +216,8 @@ class ValidityInterval(BaseModel):
             second = int(date[12:14])
         except (ValueError, IndexError):
             second = 0
+        if second > 59:
+            second = 59
         return datetime.datetime(year, month, day, hour, minute, second)
 
 
@@ -578,6 +582,16 @@ class NetscapeCertTypeExt(BaseModel):
         self.caCert = len(bits) > 5 and bool(bits[5])
 
 
+class AppleSubmissionCertificateExt(BaseModel):
+    def __init__(self, asn1_netscapeCertType):
+        pass
+
+
+class AppleDevelopmentCertificateExt(BaseModel):
+    def __init__(self, asn1_netscapeCertType):
+        pass
+
+
 class ExtensionType(BaseModel):
     '''"Enum" of extensions we know how to parse.'''
     SUBJ_ALT_NAME = "subjAltNameExt"
@@ -593,6 +607,8 @@ class ExtensionType(BaseModel):
     POLICY_CONSTRAINTS = "policyConstraintsExt"
     NAME_CONSTRAINTS = "nameConstraintsExt"
     NETSCAPE_CERT_TYPE = "netscapeCertTypeExt"
+    APPLE_SUBMISSION_CERTIFICATE = "appleSubmissionCertificateExt"
+    APPLE_DEVELOPMENT_CERTIFICATE = "appleDevelopmentCertificateExt"
 
 
 class ExtensionTypes(BaseModel):
@@ -627,12 +643,18 @@ class Extension(BaseModel):
                               ExtensionType.STATEMENTS),
         "1.3.6.1.5.5.7.1.1": (asn1_cert_ext.AuthorityInfoAccess(), lambda v: [AuthorityInfoAccessExt(s) for s in v],
                               ExtensionType.AUTH_INFO_ACCESS),
-        "2.5.29.37": (asn1_cert_ext.ExtendedKeyUsage(), lambda v: ExtendedKeyUsageExt(v), ExtensionType.EXT_KEY_USAGE),
+        "2.5.29.37": (asn1_cert_ext.ExtendedKeyUsage(), lambda v: ExtendedKeyUsageExt(v),
+                      ExtensionType.EXT_KEY_USAGE),
         "2.5.29.36": (asn1_cert_ext.PolicyConstraints(), lambda v: PolicyConstraintsExt(v),
                       ExtensionType.POLICY_CONSTRAINTS),
-        "2.5.29.30": (asn1_cert_ext.NameConstraints(), lambda v: NameConstraintsExt(v), ExtensionType.NAME_CONSTRAINTS),
+        "2.5.29.30": (asn1_cert_ext.NameConstraints(), lambda v: NameConstraintsExt(v),
+                      ExtensionType.NAME_CONSTRAINTS),
         "2.16.840.1.113730.1.1": (asn1_cert_ext.NetscapeCertType(), lambda v: NetscapeCertTypeExt(v),
                                   ExtensionType.NETSCAPE_CERT_TYPE),
+        "1.2.840.113635.100.6.1.4": (None, lambda v: AppleSubmissionCertificateExt(v),
+                                     ExtensionType.APPLE_SUBMISSION_CERTIFICATE),
+        "1.2.840.113635.100.6.1.2": (None, lambda v: AppleDevelopmentCertificateExt(v),
+                                     ExtensionType.APPLE_DEVELOPMENT_CERTIFICATE),
     }
 
     def __init__(self, extension):

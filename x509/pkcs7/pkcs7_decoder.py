@@ -14,7 +14,8 @@
 #*
 #*    You should have received a copy of the GNU Library General Public
 #*    License along with this library; if not, write to the Free
-#*    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#*    Foundation, Inc., 51 Franklin Street, Fifth Floor,
+#*    Boston, MA  02110-1301  USA
 #*
 '''
 Decoding of PKCS7 messages
@@ -23,7 +24,7 @@ Decoding of PKCS7 messages
 from cStringIO import StringIO
 
 # dslib imports
-from pkcs7.asn1_models.decoder_workarounds import decode
+from asn1_models.decoder_workarounds import decode
 
 # local imports
 from asn1_models.pkcs_signed_data import *
