@@ -18,5 +18,6 @@ setup(
             'pkcs7_parse.py = pyx509.commands:print_signature_info_cmd',
         ]
     },
+    test_suite='pyx509.test',
     zip_safe=False,
 )

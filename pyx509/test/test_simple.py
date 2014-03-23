@@ -32,7 +32,7 @@ TEST_SIGNATURE = join(TEST_DATA_DIR, 'test_signature.der')
 TEST_SIGNATURE_TXT = join(TEST_DATA_DIR, 'test_signature.txt')
 
 
-class TestCertificate(unittest.TestCase):
+class SimpleTest(unittest.TestCase):
 
     def setUp(self):
         sys.stdout = StringIO()
