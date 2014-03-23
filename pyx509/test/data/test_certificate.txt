@@ -1,0 +1,48 @@
+=== X509 Certificate ===
+X.509 version: 3 (0x2)
+Serial no: 0x3cc1cd3e
+Signature algorithm: SHA1/RSA
+Issuer: C=ES, O=FNMT, OU=FNMT Clase 2 CA
+Validity:
+	Not Before: 2010-09-03 07:43:56
+	Not After: 2013-09-03 07:43:56
+Subject: C=ES, CN=NOMBRE REVILLA DERKSEN ALEJANDRO ERNESTO - NIF 16053216K, O=FNMT, OU=703002474, OU=FNMT Clase 2 CA
+Subject Public Key Info:
+	Public Key Algorithm: RSA
+		Modulus: (b64)
+			AK4RLt+/kDr/3OZpesdx/kTj8SwaexO2eIL0GGEjdIKFoIYvm4ujpT9DnjVM
+			pt4PztglsjZlPyN0go7kbEw5NphKcR2dMK8nigIbMGAqoAlFPoLSxnc1/FZs
+			2je8KGG2ep4MSkNB5IjfY/TYK6lUWsUrjdKHiP3Zt/GBEzG9o85ZzSIMSGzG
+			v1WGjZ2TtOWD/kotXOypO82OPzOFd5PR/kVdTHcFsqcoFdYxF1TRdsNYgEsJ
+			OFdTf/ZJGo3RqbfWrPcMNzbw2rMYK8CSLuoohAODvV7DR3LdpYXccYjgdc3F
+			G0+yrDvu7mnaMxEBjgQ2caTevb3ynZ+CxiNQg+sHIB0=
+		Exponent: 65537
+
+Extensions:
+	Authority Key Id Ext: is_critical: False
+		key id: (b64)
+			QJp2RJd0B8SsFMsejU86RXww12E=
+	Basic Constraints Ext: is_critical: False
+		CA: False
+		max_path_len: None
+	Cert Policies Ext: is_critical: False
+		policy OID: 1.3.6.1.4.1.5734.3.5
+			oid: 1.3.6.1.5.5.7.2.1
+			qualifier: http://www.cert.fnmt.es/convenio/dpc.pdf
+			oid: 1.3.6.1.5.5.7.2.2
+			qualifier: None
+	CRL Distribution Points: is_critical: False
+		distribution point: 2.5.4.6 => ES,2.5.4.10 => FNMT,2.5.4.11 => FNMT Clase 2 CA,2.5.4.3 => CRL7554
+	Key Usage: is_critical: False
+		digitalSignature,keyEncipherment
+	Subject Alternative Name: is_critical: False
+		email: ernesto.revilla@gmail.com
+		dirName: Apellido1=REVILLA, Apellido2=DERKSEN, DNI=16053216K, Nombre=ALEJANDRO ERNESTO
+	Subject Key Id: is_critical: False
+		key id: (b64)
+			VH60wuEN9J6i8CgeXlSDUtoftKI=
+Signature: (b64)
+	JyHLQbVKg7bmjnTSqwjrXzyVsCfN3c6BCh6tgva7+0ikOyhvzcuwGap2A3hw
+	2fCgN4SLN2aRplxnagtmIAzNzVA3NNIJumC8m7gcSXixvMdpgVQ+7UZWCvpd
+	hpyEX9IJjWE/fiICow9bN2h1EEfhdwmJtU0gIQywpcqlKdzOBn8=
+=== EOF X509 Certificate ===

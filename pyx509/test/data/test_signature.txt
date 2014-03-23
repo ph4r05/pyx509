@@ -1,0 +1,56 @@
+= PKCS7 signature block =
+PKCS7 Version: 1
+== Encapsulated content Info ==
+ContentType: data
+Content: None
+== Signer info ==
+Certificate serial number: 0x89bbba0749918db3
+Issuer: C=es, CN=estela, O=telefonica, ST=madrid
+Digest Algorithm: SHA-1
+Signature: (b64)
+	gXpU5jadSY+FVBoeCdvn1/m5bzEMzN3ZKuiN9sPk79iJgX+DDDOMH6K5Scnh
+	wLL7nHRT983GlhTY1A2QE1VryWTbuBGK08oalKIM8QZs3UfZa5dXsx83eS4b
+	/M/icfIf6CHu1fWZ4VBJ4mva2N3nh2r0FV09bvuj1bodl4kXJAs=
+Attributes:
+     contentType: data
+     serialNumber: 0x89bbba0749918db3
+     signingTime: 2011-10-04 14:36:51
+     messageDigest: y8OX3qoZBY4/Cc6/w0xuRqzzQzU=
+     signingCertificate: 0x89bbba0749918db3
+== EOF Signer info ==
+=== X509 Certificate ===
+X.509 version: 3 (0x2)
+Serial no: 0x89bbba0749918db3
+Signature algorithm: SHA1/RSA
+Issuer: C=es, CN=estela, O=telefonica, ST=madrid
+Validity:
+	Not Before: 2011-09-17 00:00:00
+	Not After: 2031-09-12 11:09:54
+Subject: C=es, CN=REVILLA DERKSEN, ALEJANDRO ERNESTO16053216K, O=telefonica, OU=estela, email=tramitacion.electronica@telefonica.es
+Subject Public Key Info:
+	Public Key Algorithm: RSA
+		Modulus: (b64)
+			AOs2/Pip46F5BJPBQd/5bwS1HO97lJ74ZjJfGtvEH831d6Ld4bsF9jdFOjlx
+			mv+kxYNFryZZFWM109+zng/PiU8NZPRZt4XlTO7qb3r2g5AR17EQWJNokQto
+			s3w3cXSEDPxxFmTHEhGarTLddEg2o1v9/UIlMS8mzHej0Q9uBuuh
+		Exponent: 65537
+
+Extensions:
+	Authority Key Id Ext: is_critical: False
+		key id: (b64)
+			AiuDvGb4bxWnCsZJ9/RHNrRhSxk=
+	Basic Constraints Ext: is_critical: False
+		CA: False
+		max_path_len: None
+	Subject Alternative Name: is_critical: False
+		email: tramitacion.electronica@telefonica.es
+		dirName: Apellido1=REVILLA, Apellido2=DERKSEN, DNI=16053216K, Nombre=ALEJANDRO ERNESTO
+	Subject Key Id: is_critical: False
+		key id: (b64)
+			Zh0L6JJSz+GgiCimE4U7s5PHH+g=
+Signature: (b64)
+	k1OVoQyNZv0ASor/bitI6JgJm37piIheIzwdKSgEtKeQuIXfA5V5rclPVUg7
+	PW71JTQyY8iDbvJB4sb4FH5XyjOXUmf3CXiG7ppS48cQXSf1k3wHWZB0neTE
+	V3XxZnPjqWvv0x0ScsOGKxpHjyy8SFZMKR6tnfQ4TXfHMxid7dw=
+=== EOF X509 Certificate ===
+= EOF PKsCS7 signature block =
