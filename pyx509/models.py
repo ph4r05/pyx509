@@ -31,12 +31,10 @@ from pyasn1.error import PyAsn1Error
 from pkcs7.asn1_models.oid import oid_map
 from pkcs7.asn1_models.tools import tuple_to_OID, get_RSA_pub_key_material, get_DSA_pub_key_material
 from pkcs7.asn1_models.X509_certificate import Certificate as asn1_Certificate
-from pkcs7.asn1_models.pkcs_signed_data import Qts
-#from pkcs7.asn1_models.certificate_extensions import *
+from pkcs7.asn1_models.TST_info import TSTInfo as asn1_TSTInfo
+from pkcs7.asn1_models.pkcs_signed_data import Qts as asn1_Qts
 from pkcs7.asn1_models import certificate_extensions as asn1_cert_ext
-#from pkcs7.debug import *
 from pkcs7.asn1_models.decoder_workarounds import decode
-from pkcs7 import pkcs7_decoder
 
 
 class CertificateError(Exception):
@@ -1158,6 +1156,8 @@ class TSTInfo(BaseModel):
     '''
     Holder for Timestamp Token Info - attribute from the qtimestamp.
     '''
+    asn1Spec = asn1_TSTInfo()
+
     def __init__(self, asn1_tstInfo):
         self.version = asn1_tstInfo.getComponentByName("version")._value
         self.policy = str(asn1_tstInfo.getComponentByName("policy"))
@@ -1230,8 +1230,7 @@ class EncapsulatedContentInfo(BaseModel):
         self.content = parsed_content_info.getComponentByName("eContent")
         if self.content:
             if str(self.contentType) == 'TimeStampToken':
-                parsed = pkcs7_decoder.decode_tst(self.content)
-                self.content = TSTInfo(parsed)
+                self.content = TSTInfo.from_der(self.content)
             else:
                 self.content = self.content._value
 
@@ -1273,7 +1272,7 @@ class PKCS7_SignedData(BaseModel):
 class PKCS7(BaseModel):
     """A PKCS 7 object
     Currently, we only handle SignedData."""
-    asn1Spec = Qts()
+    asn1Spec = asn1_Qts()
 
     def __init__(self, parsed_content):
         contentType, content = parsed_content
