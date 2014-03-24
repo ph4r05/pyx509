@@ -24,12 +24,15 @@ from models import X509Certificate
 
 def print_certificate_info(derData):
     """
-    Print certificate
+    Print certificate to stdout
     """
     X509Certificate.from_der(derData).display()
 
 
 def print_certificate_info_cmd():
+    """
+    Print certificate command
+    """
     if len(sys.argv) < 2:
         print >> sys.stderr, "Usage: %s <certicate file>" % sys.argv[0]
         sys.exit(1)
@@ -38,12 +41,15 @@ def print_certificate_info_cmd():
 
 def print_signature_info(derData):
     """
-    Print certificates of signature
+    Print signature certificates to stdout
     """
     PKCS7.from_der(derData).display()
 
 
 def print_signature_info_cmd():
+    """
+    Print signature certificates command
+    """
     if len(sys.argv) < 2:
         print >> sys.stderr, "Usage: %s <pkcs 7 signature file>" % sys.argv[0]
         sys.exit(1)
