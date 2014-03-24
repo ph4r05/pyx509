@@ -1,0 +1,92 @@
+= PKCS7 signature block =
+PKCS7 Version: 3
+== Encapsulated content Info ==
+ContentType: TimeStampToken
+=== Timestamp Info ===
+Version: 1
+Policy: 1.3.4.6.1.3.4.6
+msgImprint:
+	Algorithm Id: 1.3.14.3.2.26
+	Value: (b64)
+		rnLdD3molzRsebPvq7oOSG9n8fU=
+Serial number: 134059559
+Time: 20131011084712Z
+==== Accuracy ====
+Seconds: 1
+Milis: 1
+Micros 2
+==== EOF Accuracy ====
+TSA: 
+=== EOF Timestamp Info ===
+== Signer info ==
+Certificate serial number: 0x5079e
+Issuer: C=ES, CN=MINISDEF-EC-WPG, O=MDEF, OU=PKI
+Digest Algorithm: SHA-1
+Signature: (b64)
+	NBfh55FcFLmSOyma/Cq7KdoLlKphVAgfeTWZ4EkJXCFPPG3PzYuYsyawB7uG
+	Acerk/RmNHwRiZiX9tOfTIyfm97hL9t8jW8bUd0dZIF76mruMZ1O0P21cyen
+	tkM69lmazU+ZY7Z87EuiyGY/QrE+NW/ZdwsDWSx8XrD2qy9XPN9NFyHqOg7u
+	ZaOjGNY9mf778m5K3BUv6nu557+CJ4VJoLYChunUHvZucNFuEvMbmCBqP8ab
+	O+mKArLfU4pThU+eLHGrGjKz1/YUTRtQ68LG7Gdf9SCygxn6t9zMdVa7wPJG
+	f8chEEbUL4iPQMdIANiYobwZHGWQxt8mawM7zo/uFg==
+Attributes:
+     contentType: TimeStampToken
+     messageDigest: KpRSk0vbBke+8G40MIII9NNb51E=
+     signingCertificate: 0x5079e
+== EOF Signer info ==
+=== X509 Certificate ===
+X.509 version: 3 (0x2)
+Serial no: 0x5079e
+Signature algorithm: SHA1/RSA
+Issuer: C=ES, CN=MINISDEF-EC-WPG, O=MDEF, OU=PKI
+Validity:
+	Not Before: 2011-08-17 09:50:22
+	Not After: 2021-08-17 09:50:22
+Subject: C=ES, CN=Sello de tiempo TS@ - @firma - desarrollo, O=MDEF, OU=PKI, serialNumber=S2833002E
+Subject Public Key Info:
+	Public Key Algorithm: RSA
+		Modulus: (b64)
+			AKDBVlAHkt+F7ucl64Ecnd+3zyy/0ZmPBlWsnfUhZyjOi4h0yjX1QAEBnSse
+			s5Rtf/fknROZFYi3/rWYWjdCpeVAlFBhG8wcBm0xCEtEQIjidtiSSTC9IaWf
+			8YQnaDePyDa7gk4zFWaPWMu1kxoCU9YqIfYHtRxHxyO81qUPRccDXPnjZgPp
+			YdNa9v2iNcPrMdrU3YcJz5NW3WHWNr1Fs0nZAv0qLNAeRHBM/sduMh9GM4Hs
+			dl0d1e3Dxm+4ihgsAPhi6OdSRpj5nS3/DmqEMxCIopeISQ8MVTsYbXnvx0sO
+			phO4CY8O4YoGEUJt1PFGEi6FcvPjfy4SyQZ1kBesL6c=
+		Exponent: 65537
+
+Extensions:
+	Authority Information Access Ext: is_critical: False
+		accessLocation: http://ev01-wpg.mdef.es:9308
+		accessMethod: ocsp
+		oid: 1.3.6.1.5.5.7.48.1
+	Authority Key Id Ext: is_critical: False
+		key id: (b64)
+			q+O5IYBb+nYPx0bbsJuIC1qxyrI=
+	Basic Constraints Ext: is_critical: True
+		CA: False
+		max_path_len: None
+	Cert Policies Ext: is_critical: False
+		policy OID: 2.16.724.1.1.1.1.3.4
+			oid: 1.3.6.1.5.5.7.2.1
+			qualifier: http://pki.mdef.es/cps/cps.htm
+	CRL Distribution Points: is_critical: False
+		distribution point: ldap:///CN=MINISDEF-EC-WPG,CN=EC-WPG,CN=CDP,CN=Public%20Key%20Services,CN=Services,CN=Configuration,DC=et,DC=mde,DC=es?certificateRevocationList?base?objectclass=cRLDistributionPoint
+	Extended Key Usage: is_critical: True
+		timeStamping
+	Key Usage: is_critical: True
+		digitalSignature,nonRepudiation
+	Subject Alternative Name: is_critical: False
+		email: soporte.afirma5@mpt.es
+		dirName: CN=TS@- Autoridad Sellado de tiempo-desarrollo, O=Ministerio de la Política Territorial y Administración Pública, certType=sello de tiempo, serialNumber=S2833002E
+	Subject Key Id: is_critical: False
+		key id: (b64)
+			63SfZzWU5tC/Vpchcywljrfz7dc=
+Signature: (b64)
+	uTu1nNp/+MaRuJqEuMsZoyufFRo9wPysLeR66vFclt6tAML0WNnc6LfjbiVD
+	ZKA9hmxPWwUeYYfKUwnpGPSTx1xYIn8kUzxRTjFTfPxa3J/GlAHPokz87Eay
+	o/BrDBJJWCHw+ex1ndUpNayvIuPhE5OWy3uHYg6QYiHX53kDRdZDLQD0GMu6
+	8koC6EjsgD7LSSiN8CRuUtcMMPFB6bGaqCP/zjFg6B6/U//YRx/GWXogj0Wu
+	x9WZjLBoRwRHMGK7BfYBTX40I7iX4YOT0VocHPrcbAoO5eADQIQv7VGdOLjr
+	0v5FVhJ5l3vfWGRtZyPdjL36U+gHz9zuscnuAgdr6A==
+=== EOF X509 Certificate ===
+= EOF PKsCS7 signature block =

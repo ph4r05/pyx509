@@ -30,6 +30,8 @@ TEST_CERTIFICATE = join(TEST_DATA_DIR, 'test_certificate.der')
 TEST_CERTIFICATE_TXT = join(TEST_DATA_DIR, 'test_certificate.txt')
 TEST_SIGNATURE = join(TEST_DATA_DIR, 'test_signature.der')
 TEST_SIGNATURE_TXT = join(TEST_DATA_DIR, 'test_signature.txt')
+TEST_TIMESTAMP = join(TEST_DATA_DIR, 'test_timestamp.der')
+TEST_TIMESTAMP_TXT = join(TEST_DATA_DIR, 'test_timestamp.txt')
 
 
 class SimpleTest(unittest.TestCase):
@@ -52,6 +54,11 @@ class SimpleTest(unittest.TestCase):
         txt2 = file(TEST_SIGNATURE_TXT).read()
         self.assertEqual(txt1, txt2)
 
+    def test_timestamp(self):
+        commands.print_signature_info(file(TEST_TIMESTAMP).read())
+        txt1 = sys.stdout.getvalue()
+        txt2 = file(TEST_TIMESTAMP_TXT).read()
+        self.assertEqual(txt1, txt2)
 
 if __name__ == '__main__':
     unittest.main()
