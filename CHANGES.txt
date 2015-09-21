@@ -3,4 +3,4 @@
 
 * Add method PKCS7.get_timestamp_info to get basic timestamp info from parsed timestamp
 * Addes CHANGES.txt
-
+* Add compatibility method get_time_stamp_info
