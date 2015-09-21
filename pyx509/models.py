@@ -1282,6 +1282,17 @@ class PKCS7(BaseModel):
         else:
             raise ValueError("Currently we only can handle PKCS7 'signedData' messages")
 
+    def get_timestamp_info(self):
+        """
+        return timestamp main information
+        """
+        signedDate = self.content.encapsulatedContentInfo.content.get_genTime_as_datetime()
+        c = self.content.certificates[0]
+        valid_from = c.tbsCertificate.validity.get_valid_from_as_datetime()
+        valid_to = c.tbsCertificate.validity.get_valid_to_as_datetime()
+        signer = str(c.tbsCertificate.subject)
+        return signedDate, valid_from, valid_to, signer
+
     def display(self):
         try:
             self.content.display()

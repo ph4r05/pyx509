@@ -54,3 +54,24 @@ def print_signature_info_cmd():
         print >> sys.stderr, "Usage: %s <pkcs 7 signature file>" % sys.argv[0]
         sys.exit(1)
     print_signature_info(file(sys.argv[1]).read())
+
+
+def print_timestamp_info(derData):
+    """
+    Print timestamp info
+    """
+    pkcs7 = PKCS7.from_der(derData)
+    signedDate, valid_from, valid_to, signer = pkcs7.get_timestamp_info()
+    print "Signature date: %s" % signedDate
+    print "Signers certicate valid from: %s, to: %s" % (valid_from, valid_to)
+    print "Signers certicate sbject: %s" % signer
+
+
+def print_timestamp_info_cmd():
+    """
+    Print timestamp data
+    """
+    if len(sys.argv) < 2:
+        print >> sys.stderr, "Usage: %s <pkcs 7 signature file>" % sys.argv[0]
+        sys.exit(1)
+    print_timestamp_info(file(sys.argv[1]).read())

@@ -1,0 +1,6 @@
+0.1.5 2015-09-21
+----------------
+
+* Add method PKCS7.get_timestamp_info to get basic timestamp info from parsed timestamp
+* Addes CHANGES.txt
+
