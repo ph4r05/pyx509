@@ -108,6 +108,8 @@ class Name(BaseModel):
         "1.3.6.1.4.1.5734.1.3": "Apellido2",
         "1.3.6.1.4.1.5734.1.1": "Nombre",
         "1.3.6.1.4.1.5734.1.4": "DNI",
+        "1.3.6.1.4.1.5734.1.6": "RazonSocial",
+        "1.3.6.1.4.1.5734.1.7": "CIF",
         # Spain, Ministry of Presidence, X509 SubjectAltName fields electronic sealing
         "2.16.724.1.3.5.2.2.1": "certType",
         "2.16.724.1.3.5.2.2.2": "O",
