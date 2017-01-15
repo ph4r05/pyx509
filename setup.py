@@ -2,13 +2,13 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(
-    name='pyx509',
-    version='0.1.5',
+    name='pyx509_ph4',
+    version='0.1.6',
     packages=find_packages(),
-    url='http://pypi.python.org/pypi/pyx509/',
+    url='https://deadcode.me',
     license='LICENSE.txt',
     description='Parse x509v3 certificates and PKCS7 signatures',
-    long_description=open('README.txt').read(),
+    long_description=open('README.rst').read(),
     install_requires=[
             "pyasn1 >= 0.1.7",
     ],

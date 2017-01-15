@@ -39,6 +39,15 @@ Dependencies
 
 * pyasn1 >= 0.1.7
 
+
+Installation
+============
+
+    .. code:: python
+
+    pip install pyx509_ph4
+
+
 License
 =======
 
