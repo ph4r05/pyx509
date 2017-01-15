@@ -3,10 +3,12 @@ from setuptools import find_packages
 
 setup(
     name='pyx509_ph4',
-    version='0.1.7',
+    version='0.1.8',
     packages=find_packages(),
-    url='https://deadcode.me',
-    license='LICENSE.txt',
+    url='https://github.com/ph4r05/pyx509',
+    maintainer='ph4r05',
+    maintainer_email='ph4r05@gmail.com',
+    license=open('LICENSE.txt').read(),
     description='Parse x509v3 certificates and PKCS7 signatures',
     long_description=open('README.rst').read(),
     install_requires=[

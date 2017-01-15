@@ -43,7 +43,7 @@ Dependencies
 Installation
 ============
 
-    .. code:: python
+Install with pip::
 
     pip install pyx509_ph4
 
@@ -82,8 +82,6 @@ Known bugs and quirks
 
 TODO
 ====
-
-* Publish in Pypi
 
 * Cleanup: This module has it's own pyasn1 models. Look if we can
   reuse the pyasn1_modules.rfc2459 X509 cert model.
