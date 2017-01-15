@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name='pyx509_ph4',
-    version='0.1.6',
+    version='0.1.7',
     packages=find_packages(),
     url='https://deadcode.me',
     license='LICENSE.txt',
