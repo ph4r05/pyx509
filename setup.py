@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name='pyx509_ph4',
-    version='0.2.0',
+    version='0.2.1',
     packages=find_packages(),
     url='https://github.com/ph4r05/pyx509',
     maintainer='ph4r05',
