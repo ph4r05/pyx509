@@ -1,0 +1,7 @@
+Sign date: None
+Sign not before: 2013-04-22 06:45:31
+Sign not after: 3012-08-23 06:45:31
+Signer: C=86, CN=DH, L=海淀, O=数字天堂（北京）网络技术有限公司, OU=数字天堂（北京）网络技术有限公司, ST=北京
+Signer serial: 1366613131
+Sign issuer: C=86, CN=DH, L=海淀, O=数字天堂（北京）网络技术有限公司, OU=数字天堂（北京）网络技术有限公司, ST=北京
+Sign algorithm: SHA-1
