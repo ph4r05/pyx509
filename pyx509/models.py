@@ -1265,11 +1265,10 @@ class EncapsulatedContentInfo(BaseModel):
     def __init__(self, parsed_content_info):
         self.contentType = ContentType(str(parsed_content_info.getComponentByName('eContentType')))
         self.content = parsed_content_info.getComponentByName("eContent")
+
         if self.content.isValue:
             if str(self.contentType) == 'TimeStampToken':
                 self.content = TSTInfo.from_der(self.content)
-            else:
-                self.content = self.content
 
     def display(self):
         print("== Encapsulated content Info ==")
@@ -1325,17 +1324,16 @@ class PKCS7(BaseModel):
         """
         return timestamp main information
         """
-        signedDate = self.content.encapsulatedContentInfo.content.get_genTime_as_datetime()
+        signedDate = None
+        if self.content is not None \
+            and self.content.encapsulatedContentInfo is not None \
+            and self.content.encapsulatedContentInfo.content is not None \
+            and isinstance(self.content.encapsulatedContentInfo.content, TSTInfo):
+            signedDate = self.content.encapsulatedContentInfo.content.get_genTime_as_datetime()
+
         c = self.content.certificates[0]
         valid_from = c.tbsCertificate.validity.get_valid_from_as_datetime()
         valid_to = c.tbsCertificate.validity.get_valid_to_as_datetime()
-        # import sys
-        # xxx  =sys.stdout
-        # sys.stdout = sys.__stdout__
-        # print('\n%s' % c.tbsCertificate.subject)
-        # print(type(c.tbsCertificate.subject))
-        # print('-'*80)
-        # sys.stdout = xxx
 
         signer = str(c.tbsCertificate.subject)
         return signedDate, valid_from, valid_to, signer
