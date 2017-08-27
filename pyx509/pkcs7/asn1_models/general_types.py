@@ -48,10 +48,10 @@ class ConvertibleBitString(univ.BitString):
             return chr(int(''.join(map(str, tuple)), 2))
 
         res = ''
-        byte_len = len(self._value) / 8
+        byte_len = len(self) / 8
         for byte_idx in xrange(byte_len):
             bit_idx = byte_idx * 8
-            byte_tuple = self._value[bit_idx:bit_idx + 8]
+            byte_tuple = self[bit_idx:bit_idx + 8]
             byte = _tuple_to_byte(byte_tuple)
             res += byte
         return res
@@ -69,15 +69,12 @@ class DirectoryString(univ.Choice):
         namedtype.NamedType('bitString', univ.BitString()),  # needed for X500 Unique Identifier, RFC 4519
     )
 
-    def __repr__(self):
+    def __str__(self):
         try:
             c = self.getComponent()
-            return c.__str__()
+            return str(c)
         except:
             return "Choice type not chosen"
-
-    def __str__(self):
-        return repr(self)
 
 
 class AttributeValue(DirectoryString): pass
@@ -85,7 +82,7 @@ class AttributeValue(DirectoryString): pass
 
 class AttributeType(univ.ObjectIdentifier):
     def __str__(self):
-        return tuple_to_OID(self._value)
+        return tuple_to_OID(self)
 
 
 class AttributeTypeAndValue(univ.Sequence):
@@ -94,15 +91,14 @@ class AttributeTypeAndValue(univ.Sequence):
         namedtype.NamedType('value', AttributeValue())
     )
 
-    def __repr__(self):
+    def __str__(self):
         # s = "%s => %s" % [ self.getComponentByName('type'), self.getComponentByName('value')]
         type = self.getComponentByName('type')
         value = self.getComponentByName('value')
-        s = "%s => %s" % (type, value)
+        s = "%s => %s" % (type, str(value))
         return s
 
-    def __str__(self):
-        return self.__repr__()
+    __repr__ = __str__
 
 
 class RelativeDistinguishedName(univ.SetOf):
@@ -131,7 +127,7 @@ class RDNSequence(univ.SequenceOf):
 
 class Name(univ.Choice):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('', RDNSequence())
+        namedtype.NamedType('name', RDNSequence())
     )
 
     def __str__(self):
@@ -146,13 +142,9 @@ class AlgorithmIdentifier(univ.Sequence):
         #        namedtype.OptionalNamedType('parameters', univ.ObjectIdentifier())
     )
 
-    def __repr__(self):
-        tuple = self.getComponentByName('algorithm')
-        str_oid = tuple_to_OID(tuple)
-        return str_oid
-
     def __str__(self):
-        return repr(self)
+        tuple = self.getComponentByName('algorithm')
+        return str(tuple)
 
 
 class UniqueIdentifier(ConvertibleBitString):

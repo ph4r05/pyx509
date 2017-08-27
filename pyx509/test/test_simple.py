@@ -63,17 +63,17 @@ class SimpleTest(unittest.TestCase):
         commands.print_signature_info(open(TEST_TIMESTAMP, 'rb').read())
         txt1 = u'%s' % (sys.stdout.getvalue()).decode('utf-8')
         txt2 = open(TEST_TIMESTAMP_TXT).read()
-
-        with open('/tmp/a1', 'w') as fh:
-            fh.write(txt1)
-        with open('/tmp/a2', 'w') as fh:
-            fh.write(txt2)
         self.assertEqual(txt1, txt2)
 
     def test_timestamp_info(self):
         commands.print_timestamp_info(open(TEST_TIMESTAMP, 'rb').read())
-        txt1 = sys.stdout.getvalue()
+        txt1 = u'%s' % sys.stdout.getvalue()
         txt2 = open(TEST_TIMESTAMP_INFO_TXT).read()
+
+        with open('/tmp/b1', 'w') as fh:
+            fh.write(txt1)
+        with open('/tmp/b2', 'w') as fh:
+            fh.write(txt2)
         self.assertEqual(txt1, txt2)
 
 

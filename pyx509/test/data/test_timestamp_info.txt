@@ -1,3 +1,3 @@
-Signature date: 2013-10-11 10:47:12
+Signature date: 2013-10-11 08:47:12+00:00
 Signers certicate valid from: 2011-08-17 09:50:22, to: 2021-08-17 09:50:22
 Signers certicate sbject: C=ES, CN=Sello de tiempo TS@ - @firma - desarrollo, O=MDEF, OU=PKI, serialNumber=S2833002E

@@ -67,7 +67,7 @@ class BaseModel(object):
         if format == 'hex':
             value = hexlify(value)
         else:
-            value = base64.standard_b64encode(value)
+            value = base64.standard_b64encode(str(value))
         res = ['(%s)' % format]
         while value:
             res.append(value[:60])
@@ -131,13 +131,19 @@ class Name(BaseModel):
 
     def __init__(self, name):
         self.__attributes = {}
+
+        if isinstance(name, str):
+            return
+
         for name_part in name:
-            for attr in name_part:
-                type = str(attr.getComponentByPosition(0).getComponentByName('type'))
+            name_obj = name[name_part]
+
+            for attr in name_obj:
+                type_ = str(attr.getComponentByPosition(0).getComponentByName('type'))
                 value = str(attr.getComponentByPosition(0).getComponentByName('value'))
 
                 # use numeric OID form only if mapping is not known
-                typeStr = Name._oid2Name.get(type) or type
+                typeStr = Name._oid2Name.get(type_) or type_
                 values = self.__attributes.get(typeStr)
                 if values is None:
                     self.__attributes[typeStr] = [value]
@@ -193,14 +199,14 @@ class ValidityInterval(BaseModel):
             pass
         if name == "generalTime":  # from pkcs7.asn1_models.X509_certificate.Time
             # already in YYYYMMDDHHMMSSZ format
-            return timeComponent.getComponent()._value
+            return timeComponent.getComponent()
         else:  # utcTime
             # YYMMDDHHMMSSZ format
             # UTCTime has only short year format (last two digits), so add
             # 19 or 20 to make it "full" year; by RFC 5280 it's range 1950..2049
             # !!!! some hack to get signingTime working
             try:
-                timeValue = timeComponent.getComponent()._value
+                timeValue = timeComponent.getComponent()
             except AttributeError:
                 timeValue = str(timeComponent[1][0])
             shortyear = int(timeValue[:2])
@@ -281,15 +287,21 @@ class SubjectAltNameExt(BaseModel):
                     (6, 'URI'),
                     (7, 'IP'),
                     (8, 'RegisteredID')):
-                comp = gname.getComponentByPosition(pos)
-                if comp:
-                    if pos in (0, 3, 5):  # May be wrong
-                        value = Name(comp)
-                    elif pos == 4:
-                        value = Name(comp)
-                    else:
-                        value = str(comp)
-                    self.items.append((key, value))
+                field_name = gname.getNameByPosition(pos)
+                if field_name not in gname:
+                    continue
+
+                comp = gname.getComponentByName(field_name)
+                if comp is None or not comp.isValue:
+                    continue
+
+                if pos in (0, 3, 5):  # May be wrong
+                    value = Name(comp)
+                elif pos == 4:
+                    value = Name(comp)
+                else:
+                    value = str(comp)
+                self.items.append((key, value))
 
 
 class BasicConstraintsExt(BaseModel):
@@ -298,10 +310,11 @@ class BasicConstraintsExt(BaseModel):
     """
 
     def __init__(self, asn1_bConstraints):
-        self.ca = bool(asn1_bConstraints.getComponentByName("ca")._value)
+        self.ca = bool(asn1_bConstraints.getComponentByName("ca"))
         self.max_path_len = None
-        if asn1_bConstraints.getComponentByName("pathLen") is not None:
-            self.max_path_len = asn1_bConstraints.getComponentByName("pathLen")._value
+        if asn1_bConstraints.getComponentByName("pathLen") is not None \
+                and asn1_bConstraints.getComponentByName("pathLen").isValue:
+            self.max_path_len = asn1_bConstraints.getComponentByName("pathLen")
 
 
 class KeyUsageExt(BaseModel):
@@ -320,7 +333,7 @@ class KeyUsageExt(BaseModel):
         self.encipherOnly = False  # (7),
         self.decipherOnly = False  # (8)
 
-        bits = asn1_keyUsage._value
+        bits = asn1_keyUsage
         try:
             if (bits[0]):
                 self.digitalSignature = True
@@ -376,9 +389,9 @@ class AuthorityKeyIdExt(BaseModel):
 
     def __init__(self, asn1_authKeyId):
         if (asn1_authKeyId.getComponentByName("keyIdentifier")) is not None:
-            self.key_id = asn1_authKeyId.getComponentByName("keyIdentifier")._value
+            self.key_id = asn1_authKeyId.getComponentByName("keyIdentifier")
         if (asn1_authKeyId.getComponentByName("authorityCertSerialNum")) is not None:
-            self.auth_cert_sn = asn1_authKeyId.getComponentByName("authorityCertSerialNum")._value
+            self.auth_cert_sn = asn1_authKeyId.getComponentByName("authorityCertSerialNum")
         if (asn1_authKeyId.getComponentByName("authorityCertIssuer")) is not None:
             issuer = asn1_authKeyId.getComponentByName("authorityCertIssuer")
             iss = str(issuer.getComponentByName("name"))
@@ -391,7 +404,7 @@ class SubjectKeyIdExt(BaseModel):
     """
 
     def __init__(self, asn1_subKey):
-        self.subject_key_id = asn1_subKey._value
+        self.subject_key_id = asn1_subKey
 
 
 class PolicyQualifier(BaseModel):
@@ -408,7 +421,7 @@ class PolicyQualifier(BaseModel):
             # this is a choice - only one of following types will be non-null
 
             comp = qual.getComponentByName("cpsUri")
-            if comp is not None:
+            if comp is not None and comp.isValue:
                 self.qualifier = str(comp)
                 # not parsing userNotice for now
                 # comp = qual.getComponentByName("userNotice")
@@ -466,7 +479,10 @@ class Reasons(BaseModel):
         self.privilegeWithdrawn = False  # (7),
         self.aACompromise = False  # (8)
 
-        bits = asn1_rflags._value
+        if asn1_rflags is None or not asn1_rflags.isValue:
+            return
+
+        bits = asn1_rflags
         try:
             if (bits[0]):
                 self.unused = True
@@ -503,7 +519,7 @@ class CRLdistPointExt(BaseModel):
         else:
             self.dist_point = None
         reasons = asn1_crl_dp.getComponentByName("reasons")
-        if reasons is not None:
+        if reasons is not None and reasons.isValue:
             self.reasons = Reasons(reasons)
         else:
             self.reasons = None
@@ -522,7 +538,7 @@ class QcStatementExt(BaseModel):
     def __init__(self, asn1_caStatement):
         self.oid = str(asn1_caStatement.getComponentByName("stmtId"))
         self.statementInfo = asn1_caStatement.getComponentByName("stmtInfo")
-        if self.statementInfo is not None:
+        if self.statementInfo is not None and self.statementInfo.isValue:
             self.statementInfo = str(self.statementInfo)
 
 
@@ -535,10 +551,10 @@ class PolicyConstraintsExt(BaseModel):
         inhibitPolicyMapping = asn1_policyConstraints.getComponentByName("inhibitPolicyMapping")
 
         if requireExplicitPolicy is not None:
-            self.requireExplicitPolicy = requireExplicitPolicy._value
+            self.requireExplicitPolicy = requireExplicitPolicy
 
         if inhibitPolicyMapping is not None:
-            self.inhibitPolicyMapping = inhibitPolicyMapping._value
+            self.inhibitPolicyMapping = inhibitPolicyMapping
 
 
 class NameConstraint(BaseModel):
@@ -579,10 +595,10 @@ class NameConstraintsExt(BaseModel):
 
             base = str(base)
 
-            minimum = subtree.getComponentByName("minimum")._value
+            minimum = subtree.getComponentByName("minimum")
             maximum = subtree.getComponentByName("maximum")
             if maximum is not None:
-                maximum = maximum._value
+                maximum = maximum
 
             subtreeList.append(NameConstraint(base, minimum, maximum))
 
@@ -592,7 +608,7 @@ class NameConstraintsExt(BaseModel):
 class NetscapeCertTypeExt(BaseModel):
     def __init__(self, asn1_netscapeCertType):
         # https://www.mozilla.org/projects/security/pki/nss/tech-notes/tn3.html
-        bits = asn1_netscapeCertType._value
+        bits = asn1_netscapeCertType
         self.clientCert = len(bits) > 0 and bool(bits[0])
         self.serverCert = len(bits) > 1 and bool(bits[1])
         self.caCert = len(bits) > 5 and bool(bits[5])
@@ -680,7 +696,7 @@ class Extension(BaseModel):
         self.ext_type = None
 
         # set the bytes as the extension value
-        self.value = extension.getComponentByName("extnValue")._value
+        self.value = extension.getComponentByName("extnValue")
 
         # if we know the type of value, parse it
         decoderTuple = Extension._extensionDecoders.get(self.id)
@@ -690,7 +706,8 @@ class Extension(BaseModel):
                 v = decode(self.value, asn1Spec=decoderAsn1Spec)[0]
                 self.value = decoderFunction(v)
                 self.ext_type = extType
-            except PyAsn1Error:
+            except PyAsn1Error as e:
+                raise
                 # According to RFC 5280, unrecognized extension can be ignored
                 # unless marked critical, though it doesn't cover all cases.
                 if self.is_critical:
@@ -716,8 +733,8 @@ class Certificate(BaseModel):
     """
 
     def __init__(self, tbsCertificate):
-        self.version = tbsCertificate.getComponentByName("version")._value
-        self.serial_number = tbsCertificate.getComponentByName("serialNumber")._value
+        self.version = tbsCertificate.getComponentByName("version")
+        self.serial_number = tbsCertificate.getComponentByName("serialNumber")
         self.signature_algorithm = str(tbsCertificate.getComponentByName("signature"))
         self.issuer = Name(tbsCertificate.getComponentByName("issuer"))
         self.validity = ValidityInterval(tbsCertificate.getComponentByName("validity"))
@@ -725,13 +742,13 @@ class Certificate(BaseModel):
         self.pub_key_info = PublicKeyInfo(tbsCertificate.getComponentByName("subjectPublicKeyInfo"))
 
         issuer_uid = tbsCertificate.getComponentByName("issuerUniqueID")
-        if issuer_uid:
+        if issuer_uid.isValue:
             self.issuer_uid = issuer_uid.toOctets()
         else:
             self.issuer_uid = None
 
         subject_uid = tbsCertificate.getComponentByName("subjectUniqueID")
-        if subject_uid:
+        if subject_uid.isValue:
             self.subject_uid = subject_uid.toOctets()
         else:
             self.subject_uid = None
@@ -891,11 +908,11 @@ class X509Certificate(BaseModel):
         if tbs.authKeyIdExt:
             print("\tAuthority Key Id Ext: is_critical:", tbs.authKeyIdExt.is_critical)
             aki = tbs.authKeyIdExt.value
-            if hasattr(aki, "key_id"):
-                print("\t\tkey id:", self.enc(aki.key_id, 3))
-            if hasattr(aki, "auth_cert_sn"):
+            if hasattr(aki, "key_id") and aki.key_id.isValue:
+                print("\t\tkey id:", self.enc(aki.key_id.asOctets(), 3))
+            if hasattr(aki, "auth_cert_sn") and aki.auth_cert_sn.isValue:
                 print("\t\tcert serial no:", aki.auth_cert_sn)
-            if hasattr(aki, "auth_cert_issuer"):
+            if hasattr(aki, "auth_cert_issuer") and aki.auth_cert_issuer:
                 print("\t\tissuer:", aki.auth_cert_issuer)
 
         if tbs.basicConstraintsExt:
@@ -1049,7 +1066,8 @@ class SigningCertificate(BaseModel):
             self.certs.append(ESSCertID(cert))
         self.policies = []
         try:
-            self.policies = data.getComponentByPosition(1)
+            if len(data) > 1:
+                self.policies = data[1]
         except IndexError:
             pass
 
@@ -1077,7 +1095,7 @@ class ESSCertID(BaseModel):
     def __init__(self, data):
         self.hash = data.getComponentByPosition(0)
         self.issuer = data.getComponentByPosition(1).getComponentByPosition(0)
-        self.serial_number = data.getComponentByPosition(1).getComponentByPosition(1)._value
+        self.serial_number = data.getComponentByPosition(1).getComponentByPosition(1)
 
     def __str__(self):
         return "0x%x" % self.serial_number
@@ -1108,13 +1126,13 @@ class SignerInfo(BaseModel):
     """
 
     def __init__(self, signer_info):
-        self.version = signer_info.getComponentByName("version")._value
+        self.version = signer_info.getComponentByName("version")
         self.issuer = Name(signer_info.getComponentByName("issuerAndSerialNum").getComponentByName("issuer"))
         self.serial_number = (signer_info.getComponentByName("issuerAndSerialNum")
-                              .getComponentByName("serialNumber")._value)
+                              .getComponentByName("serialNumber"))
         self.digest_algorithm = str(signer_info.getComponentByName("digestAlg"))
         self.encrypt_algorithm = str(signer_info.getComponentByName("encryptAlg"))
-        self.signature = signer_info.getComponentByName("signature")._value
+        self.signature = signer_info.getComponentByName("signature")
         auth_attrib = signer_info.getComponentByName("authAttributes")
         if auth_attrib is None:
             self.auth_attributes = None
@@ -1156,13 +1174,13 @@ class TsAccuracy(BaseModel):
     def __init__(self, asn1_acc):
         secs = asn1_acc.getComponentByName("seconds")
         if secs:
-            self.seconds = secs._value
+            self.seconds = secs
         milis = asn1_acc.getComponentByName("milis")
         if milis:
-            self.milis = milis._value
+            self.milis = milis
         micros = asn1_acc.getComponentByName("micros")
         if micros:
-            self.micros = micros._value
+            self.micros = micros
 
     def display(self):
         print("==== Accuracy ====")
@@ -1179,18 +1197,18 @@ class TSTInfo(BaseModel):
     asn1Spec = asn1_TSTInfo()
 
     def __init__(self, asn1_tstInfo):
-        self.version = asn1_tstInfo.getComponentByName("version")._value
+        self.version = asn1_tstInfo.getComponentByName("version")
         self.policy = str(asn1_tstInfo.getComponentByName("policy"))
         self.msgImprint = MsgImprint(asn1_tstInfo.getComponentByName("messageImprint"))
-        self.serialNumber = asn1_tstInfo.getComponentByName("serialNum")._value
-        self.genTime = asn1_tstInfo.getComponentByName("genTime")._value
+        self.serialNumber = asn1_tstInfo.getComponentByName("serialNum")
+        self.genTime = asn1_tstInfo.getComponentByName("genTime")
         self.accuracy = TsAccuracy(asn1_tstInfo.getComponentByName("accuracy"))
-        self.ordering = asn1_tstInfo.getComponentByName("ordering")._value
+        self.ordering = asn1_tstInfo.getComponentByName("ordering")
         self.tsa = Name(asn1_tstInfo.getComponentByName("tsa") or '')
         nonce = asn1_tstInfo.getComponentByName("nonce")
-        self.nonce = nonce and nonce._value
+        self.nonce = nonce.isValue
         extensions = asn1_tstInfo.getComponentByName("extensions")
-        self.extensions = (extensions and extensions._value) or []
+        self.extensions = (extensions and extensions.isValue) or []
 
         # place for parsed certificates in asn1 form
         self.asn1_certificates = []
@@ -1221,14 +1239,14 @@ class TSTInfo(BaseModel):
         hour = int(self.genTime[8:10])
         minute = int(self.genTime[10:12])
         second = int(self.genTime[12:14])
-        rest = self.genTime[14:].strip("Z")
+        rest = str(self.genTime[14:]).strip("Z")
+        dt = self.genTime.asDateTime
         if rest:
             micro = int(float(rest) * 1e6)
+            dt.microseconds = micro
         else:
             micro = 0
-        tz_delta = datetime.timedelta(
-            seconds=time.daylight and time.altzone or time.timezone)
-        return datetime.datetime(year, month, day, hour, minute, second, micro) - tz_delta
+        return dt
 
     def display(self):
         print("=== Timestamp Info ===")
@@ -1237,7 +1255,7 @@ class TSTInfo(BaseModel):
         print("msgImprint:")
         self.msgImprint.display()
         print("Serial number:", self.serialNumber)
-        print("Time:", self.genTime)
+        print("Time: %s" % str(self.genTime))
         self.accuracy.display()
         print("TSA:", self.tsa)
         print("=== EOF Timestamp Info ===")
@@ -1247,11 +1265,11 @@ class EncapsulatedContentInfo(BaseModel):
     def __init__(self, parsed_content_info):
         self.contentType = ContentType(str(parsed_content_info.getComponentByName('eContentType')))
         self.content = parsed_content_info.getComponentByName("eContent")
-        if self.content:
+        if self.content.isValue:
             if str(self.contentType) == 'TimeStampToken':
                 self.content = TSTInfo.from_der(self.content)
             else:
-                self.content = self.content._value
+                self.content = self.content
 
     def display(self):
         print("== Encapsulated content Info ==")
@@ -1259,7 +1277,8 @@ class EncapsulatedContentInfo(BaseModel):
         try:
             self.content.display()
         except AttributeError:
-            print("Content:", self.content)
+            if self.content.isValue:
+                print("Content:", self.content)
 
 
 class PKCS7_SignedData(BaseModel):
@@ -1268,7 +1287,7 @@ class PKCS7_SignedData(BaseModel):
 
     def __init__(self, parsed_content):
         self._content = parsed_content
-        version, digestAlgorithms, encapsulatedContentInfo, certificates, crls, signerInfos = parsed_content
+        version, digestAlgorithms, encapsulatedContentInfo, certificates, crls, signerInfos = parsed_content[:6]
         self.version = version
         self.digestAlgorithms = digestAlgorithms
         if encapsulatedContentInfo:
@@ -1294,12 +1313,13 @@ class PKCS7(BaseModel):
     asn1Spec = asn1_Qts()
 
     def __init__(self, parsed_content):
-        contentType, content = parsed_content
+        contentType, content = parsed_content[0:2]
         self.contentType = ContentType(str(contentType))
+
         if str(self.contentType) == 'signedData':
             self.content = PKCS7_SignedData(content)
         else:
-            raise ValueError("Currently we only can handle PKCS7 'signedData' messages")
+           raise ValueError("Currently we only can handle PKCS7 'signedData' messages")
 
     def get_timestamp_info(self):
         """
@@ -1309,6 +1329,14 @@ class PKCS7(BaseModel):
         c = self.content.certificates[0]
         valid_from = c.tbsCertificate.validity.get_valid_from_as_datetime()
         valid_to = c.tbsCertificate.validity.get_valid_to_as_datetime()
+        # import sys
+        # xxx  =sys.stdout
+        # sys.stdout = sys.__stdout__
+        # print('\n%s' % c.tbsCertificate.subject)
+        # print(type(c.tbsCertificate.subject))
+        # print('-'*80)
+        # sys.stdout = xxx
+
         signer = str(c.tbsCertificate.subject)
         return signedDate, valid_from, valid_to, signer
 

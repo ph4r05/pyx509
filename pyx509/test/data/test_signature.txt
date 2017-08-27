@@ -2,7 +2,6 @@
 PKCS7 Version: 1
 == Encapsulated content Info ==
 ContentType: data
-Content: None
 == Signer info ==
 Certificate serial number: 0x89bbba0749918db3
 Issuer: C=es, CN=estela, O=telefonica, ST=madrid
