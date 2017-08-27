@@ -85,6 +85,7 @@ TODO
 
 * Cleanup: This module has it's own pyasn1 models. Look if we can
   reuse the pyasn1_modules.rfc2459 X509 cert model.
+  https://github.com/etingof/pyasn1-modules/blob/master/tools/pkcs7dump.py
 
 * Cleanup: Currently, the signature verifier does not work.
 
