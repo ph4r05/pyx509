@@ -1,25 +1,29 @@
-#*    pyx509 - Python library for parsing X.509
-#*    Copyright (C) 2009-2012  CZ.NIC, z.s.p.o. (http://www.nic.cz)
-#*
-#*    This library is free software; you can redistribute it and/or
-#*    modify it under the terms of the GNU Library General Public
-#*    License as published by the Free Software Foundation; either
-#*    version 2 of the License, or (at your option) any later version.
-#*
-#*    This library is distributed in the hope that it will be useful,
-#*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#*    Library General Public License for more details.
-#*
-#*    You should have received a copy of the
-#*    GNU Library General Public License along with this library;
-#*    if not, write to the Free Foundation, Inc.,
-#*    51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-#*
+# -*- coding: utf-8 -*-
+# *    pyx509 - Python library for parsing X.509
+# *    Copyright (C) 2009-2012  CZ.NIC, z.s.p.o. (http://www.nic.cz)
+# *
+# *    This library is free software; you can redistribute it and/or
+# *    modify it under the terms of the GNU Library General Public
+# *    License as published by the Free Software Foundation; either
+# *    version 2 of the License, or (at your option) any later version.
+# *
+# *    This library is distributed in the hope that it will be useful,
+# *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+# *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# *    Library General Public License for more details.
+# *
+# *    You should have received a copy of the
+# *    GNU Library General Public License along with this library;
+# *    if not, write to the Free Foundation, Inc.,
+# *    51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+# *
+
+from builtins import str as text
 
 import os
+from io import open
 from os.path import join
-from StringIO import StringIO
+from io import BytesIO
 import sys
 import unittest
 
@@ -38,33 +42,38 @@ TEST_TIMESTAMP_INFO_TXT = join(TEST_DATA_DIR, 'test_timestamp_info.txt')
 class SimpleTest(unittest.TestCase):
 
     def setUp(self):
-        sys.stdout = StringIO()
+        sys.stdout = BytesIO()
 
     def tearDown(self):
         sys.stdout = sys.__stdout__
 
     def test_certificate(self):
-        commands.print_certificate_info(file(TEST_CERTIFICATE).read())
-        txt1 = sys.stdout.getvalue()
-        txt2 = file(TEST_CERTIFICATE_TXT).read()
+        commands.print_certificate_info(open(TEST_CERTIFICATE, 'rb').read())
+        txt1 = u'%s' % sys.stdout.getvalue()
+        txt2 = open(TEST_CERTIFICATE_TXT).read()
         self.assertEqual(txt1, txt2)
 
     def test_signature(self):
-        commands.print_signature_info(file(TEST_SIGNATURE).read())
-        txt1 = sys.stdout.getvalue()
-        txt2 = file(TEST_SIGNATURE_TXT).read()
+        commands.print_signature_info(open(TEST_SIGNATURE, 'rb').read())
+        txt1 = u'%s' % sys.stdout.getvalue()
+        txt2 = open(TEST_SIGNATURE_TXT).read()
         self.assertEqual(txt1, txt2)
 
     def test_timestamp(self):
-        commands.print_signature_info(file(TEST_TIMESTAMP).read())
-        txt1 = sys.stdout.getvalue()
-        txt2 = file(TEST_TIMESTAMP_TXT).read()
+        commands.print_signature_info(open(TEST_TIMESTAMP, 'rb').read())
+        txt1 = u'%s' % (sys.stdout.getvalue()).decode('utf-8')
+        txt2 = open(TEST_TIMESTAMP_TXT).read()
+
+        with open('/tmp/a1', 'w') as fh:
+            fh.write(txt1)
+        with open('/tmp/a2', 'w') as fh:
+            fh.write(txt2)
         self.assertEqual(txt1, txt2)
 
     def test_timestamp_info(self):
-        commands.print_timestamp_info(file(TEST_TIMESTAMP).read())
+        commands.print_timestamp_info(open(TEST_TIMESTAMP, 'rb').read())
         txt1 = sys.stdout.getvalue()
-        txt2 = file(TEST_TIMESTAMP_INFO_TXT).read()
+        txt2 = open(TEST_TIMESTAMP_INFO_TXT).read()
         self.assertEqual(txt1, txt2)
 
 

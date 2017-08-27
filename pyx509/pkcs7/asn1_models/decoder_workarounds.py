@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from pyasn1.type import univ
 from pyasn1.codec.ber import decoder as berDecoder
 from pyasn1.codec.der import decoder as derDecoder

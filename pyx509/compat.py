@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # some compatibility functions
 
 from models import PKCS7

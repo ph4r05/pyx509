@@ -1,25 +1,26 @@
-from certs import cert_finder
-
-#*    pyx509 - Python library for parsing X.509
-#*    Copyright (C) 2009-2010  CZ.NIC, z.s.p.o. (http://www.nic.cz)
-#*
-#*    This library is free software; you can redistribute it and/or
-#*    modify it under the terms of the GNU Library General Public
-#*    License as published by the Free Software Foundation; either
-#*    version 2 of the License, or (at your option) any later version.
-#*
-#*    This library is distributed in the hope that it will be useful,
-#*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#*    Library General Public License for more details.
-#*
-#*    You should have received a copy of the GNU Library General Public
-#*    License along with this library; if not, write to the Free
-#*    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-#*
-'''
+# -*- coding: utf-8 -*-
+# *    pyx509 - Python library for parsing X.509
+# *    Copyright (C) 2009-2010  CZ.NIC, z.s.p.o. (http://www.nic.cz)
+# *
+# *    This library is free software; you can redistribute it and/or
+# *    modify it under the terms of the GNU Library General Public
+# *    License as published by the Free Software Foundation; either
+# *    version 2 of the License, or (at your option) any later version.
+# *
+# *    This library is distributed in the hope that it will be useful,
+# *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+# *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# *    Library General Public License for more details.
+# *
+# *    You should have received a copy of the GNU Library General Public
+# *    License along with this library; if not, write to the Free
+# *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+# *
+"""
 Verifying of PKCS7 messages
-'''
+"""
+
+from certs import cert_finder
 
 # standard library imports
 import logging
@@ -94,10 +95,10 @@ def _get_key_material(certificate):
 
 
 def _get_digest_algorithm(signer_info):
-    '''
+    """
     Extracts digest algorithm from signerInfo component.
     Returns algorithm's name or raises Exception
-    '''
+    """
     digest_alg = str(signer_info.getComponentByName("digestAlg"))
     result = None
     if digest_alg in oid_map:
@@ -157,10 +158,10 @@ def _verify_data(data, certificates, signer_infos):
 
 
 def verify_msg(asn1_pkcs7_msg):
-    '''
+    """
     Method verifies decoded message (built from pyasn1 objects)
     Input is decoded pkcs7 message.
-    '''
+    """
     message_content = asn1_pkcs7_msg.getComponentByName("content")
     signer_infos = message_content.getComponentByName("signerInfos")
     certificates = message_content.getComponentByName("certificates")
