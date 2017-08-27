@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name='pyx509_ph4',
-    version='0.1.8',
+    version='0.1.9',
     packages=find_packages(),
     url='https://github.com/ph4r05/pyx509',
     maintainer='ph4r05',
@@ -12,7 +12,9 @@ setup(
     description='Parse x509v3 certificates and PKCS7 signatures',
     long_description=open('README.rst').read(),
     install_requires=[
-            "pyasn1 >= 0.1.7",
+            'pyasn1 >= 0.1.7',
+            'future',
+            'six',
     ],
     entry_points={
         'console_scripts': [
