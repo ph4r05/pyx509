@@ -53,6 +53,7 @@ class SimpleTest(unittest.TestCase):
         sys.stdout = sys.__stdout__
 
     def test_certificate(self):
+        self.maxDiff = None
         commands.print_certificate_info(open(TEST_CERTIFICATE, 'rb').read())
         txt1 = u'%s' % sys.stdout.getvalue()
         txt2 = open(TEST_CERTIFICATE_TXT).read()
