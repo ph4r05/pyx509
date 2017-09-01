@@ -707,7 +707,10 @@ class Extension(BaseModel):
                 self.value = decoderFunction(v)
                 self.ext_type = extType
             except PyAsn1Error as e:
-                raise
+                # If debugging uncomment the following raise.
+                # Missing extension can be caused by a bug in the parsing.
+                #raise
+                
                 # According to RFC 5280, unrecognized extension can be ignored
                 # unless marked critical, though it doesn't cover all cases.
                 if self.is_critical:
